@@ -190,7 +190,6 @@ service_df <- flip_to_proportions(service_df)
 # }
 
 feed_props <- function(flow_df, top_node_num_pairs) {
-    browser()
     st <- unique(c(flow_df$'source', flow_df$target))
     values <- rep(0, length(st))
     
@@ -216,9 +215,12 @@ feed_props <- function(flow_df, top_node_num_pairs) {
         }
     }
     
-    test <- data.frame(st, values, stringsAsFactors = FALSE)
-    return(test)
+    node_values <- data.frame(st, values, stringsAsFactors = FALSE)
+    return(list("nodes" = node_values, 
+                "df" = flow_df))
 }
+
+service_df <- feed_props(service_df, c("Referrals" = 90000))$df
 
 ###############################################################################
 ## Generate the Sankey
@@ -236,3 +238,4 @@ sankeyPlot$set(
 )
 
 sankeyPlot
+sankeyPlot$publish("service sankey", host = "gist")
